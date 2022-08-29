@@ -9,6 +9,59 @@ tags:
     description: Everything to manage events
 paths:
   /api/v1/events:
+    get:
+      tags:
+        - Event
+      summary: List and query events
+      description: |-
+        An endpoint that allows you to list all events and query for events meeting
+        certain criteria
+      parameters:
+        - in: query
+          name: url
+          schema:
+            type: string
+            format: url
+            example: "https://example.com"
+          required: false
+        - in: query
+          name: event_type
+          example: 'click'
+          schema:
+            $ref: "#/components/schemas/EventType"
+          required: false
+        - in: query
+          name: from
+          schema:
+            type: string
+            format: ISO8601
+            example: "2022-08-29T06:46:34.650Z"
+          required: false
+        - in: query
+          name: to
+          schema:
+            type: string
+            format: ISO8601
+            example: "2022-08-29T06:46:34.650Z"
+          required: false
+      responses:
+        '200':
+          description: Successfull operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Event'
+        '400':
+          description: Bad query paramters
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GenericErrorMessage'
+
     post:
       tags:
         - Event
