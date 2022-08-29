@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
 
-      resources :events, only: %i(create)
+      resources :events, only: %i(index create)
 
       scope 'docs' do
         root 'docs#show'
