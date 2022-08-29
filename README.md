@@ -1,24 +1,47 @@
-# README
+# Clickster
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Clickster is a simple proof of concept for an api to store and query tracking events
 
-Things you may want to cover:
+## Dependencies
 
-* Ruby version
+- Ruby Version 3.0.2
+- Sqlite3
 
-* System dependencies
+## Setup
 
-* Configuration
+Install the correct ruby version
 
-* Database creation
+```shell
+$ rvm install 3.02
+```
 
-* Database initialization
+Install the ruby dependencies
 
-* How to run the test suite
+```shell
+$ bundle install --jobs=64
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Setup the database
 
-* Deployment instructions
+```shell
+$ bundle exec rails db:setup
+```
 
-* ...
+Run the test suite
+
+```
+$ bundle exec rspec
+```
+
+Start a server
+
+```shell
+$ bundle exec rails server
+```
+
+## Documentation
+
+All API endpoints are documented using OpenAPI 3. After starting the server you can
+find a rendering of the documentation at `/api/v1/docs`.
+
+The openapi file can be found under `/app/api_docs/v1.yml`
