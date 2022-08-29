@@ -1,34 +1,85 @@
-openapi: 3.1.0
+openapi: 3.0.3
 info:
-  title: Webhook Example
+  title: Clickster
+  description: |-
+    An easy to use event storage api
   version: 1.0.0
-# Since OAS 3.1.0 the paths element isn't necessary. Now a valid OpenAPI Document can describe only paths, webhooks, or even only reusable components
-webhooks:
-  # Each webhook needs a name
-  newPet:
-    # This is a Path Item Object, the only difference is that the request is initiated by the API provider
+tags:
+  - name: Event
+    description: Everything to manage events
+paths:
+  /api/v1/events:
     post:
+      tags:
+        - Event
+      summary: Create new event
+      description: Create a new event by specifying its type as well as the URL
       requestBody:
-        description: Information about a new pet in the system
+        description: Payload of the new event
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Pet"
+              $ref: '#/components/schemas/CreateEventRequestBody'
+        required: true
       responses:
-        "200":
-          description: Return a 200 status to indicate that the data was received successfully
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericErrorMessage'
+
 
 components:
   schemas:
-    Pet:
-      required:
-        - id
-        - name
+    EventType:
+      type: string
+      enum:
+        - click
+        - page_view
+    CreateEventRequestBody:
+      type: object
+      properties:
+        event_type:
+          $ref: "#/components/schemas/EventType"
+        url:
+          type: string
+          format: url
+          example: "https://example.com"
+    Event:
+      type: object
       properties:
         id:
           type: integer
           format: int64
-        name:
+          example: 10
+        event_type:
+          $ref: "#/components/schemas/EventType"
+        url:
           type: string
-        tag:
+          format: url
+          example: "https://example.com"
+        created_at:
           type: string
+          format: ISO8601
+          example: "2022-08-29T06:46:34.650Z"
+        updated_at:
+          type: string
+          format: ISO8601
+          example: "2022-08-29T06:46:34.650Z"
+    GenericErrorMessage:
+      type: object
+      additionalProperties:
+          type: array
+          items:
+            type: string
+          description: "An array of error messages for the field specified by the key"
+      example:
+        "event_type": ["can't be blank"]
